@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="DailyTask.Api/DailyTask.Api.csproj" />
+  <Project Path="DailyTask.App/DailyTask.App.csproj" />
+  <Project Path="DailyTask.Domain/DailyTask.Domain.csproj" />
+  <Project Path="DailyTask.Infrastructure/DailyTask.Infrastructure.csproj" />
+</Solution>
