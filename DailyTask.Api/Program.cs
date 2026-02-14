@@ -1,5 +1,9 @@
 using DailyTask.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
+using DailyTask.Infrastructure.Services;
+using DailyTask.App.Services;
+using DailyTask.App.Interfaces;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +17,8 @@ builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddScoped<IProjectService, ProjectService>();
+builder.Services.AddScoped<ITaskService, TaskService>();
 
 builder.Services.AddDbContext<DailyTaskDbContext>(options =>
 {

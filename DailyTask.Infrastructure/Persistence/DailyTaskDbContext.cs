@@ -16,7 +16,7 @@ public class DailyTaskDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.HasDefaultSchema("DAILYTASK"); // <-- cámbialo a tu schema real en Oracle
+        modelBuilder.HasDefaultSchema("DAILYTASK");
 
         modelBuilder.Entity<Project>(e =>
         {
