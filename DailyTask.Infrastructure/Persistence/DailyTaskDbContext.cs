@@ -7,10 +7,10 @@ using System.Text;
 
 namespace DailyTask.Infrastructure.Persistence;
 
-public class DailyTaskDbContext : DbContext
+/*public class DailyTaskDbContext : DbContext
 {
-    public DailyTaskDbContext(DbContextOptions<DailyTaskDbContext> options) : base(options) { }
-
+    public DailyTaskDbContext(DbContextOptions<DailyTaskDbContext> options) : base(options) { }*/
+public class DailyTaskDbContext(DbContextOptions<DailyTaskDbContext> options) : DbContext(options) {
     public DbSet<Project> Projects => Set<Project>();
     public DbSet<TaskItem> Tasks => Set<TaskItem>();
 

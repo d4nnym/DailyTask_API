@@ -5,12 +5,13 @@ using DailyTask.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
 namespace DailyTask.Infrastructure.Services;
-
+/*
 public sealed class ProjectService : IProjectService
 {
     private readonly DailyTaskDbContext _db;
 
-    public ProjectService(DailyTaskDbContext db) => _db = db;
+    public ProjectService(DailyTaskDbContext db) => _db = db;*/
+public sealed class ProjectService(DailyTaskDbContext db) : IProjectService{
 
     public async Task<ProjectResponse> CreateAsync(CreateProjectRequest request, CancellationToken ct)
     {
@@ -20,15 +21,15 @@ public sealed class ProjectService : IProjectService
             Description = request.Description?.Trim()
         };
 
-        _db.Projects.Add(entity);
-        await _db.SaveChangesAsync(ct);
+        db.Projects.Add(entity);
+        await db.SaveChangesAsync(ct);
 
         return new ProjectResponse(entity.Id, entity.Name, entity.Description, entity.CreatedAtUtc);
     }
 
     public async Task<IReadOnlyList<ProjectResponse>> GetAllAsync(CancellationToken ct)
     {
-        return await _db.Projects
+        return await db.Projects
             .AsNoTracking()
             .OrderByDescending(p => p.CreatedAtUtc)
             .Select(p => new ProjectResponse(p.Id, p.Name, p.Description, p.CreatedAtUtc))
@@ -37,7 +38,7 @@ public sealed class ProjectService : IProjectService
 
     public async Task<ProjectResponse?> GetByIdAsync(Guid id, CancellationToken ct)
     {
-        return await _db.Projects
+        return await db.Projects
             .AsNoTracking()
             .Where(p => p.Id == id)
             .Select(p => new ProjectResponse(p.Id, p.Name, p.Description, p.CreatedAtUtc))
@@ -46,23 +47,23 @@ public sealed class ProjectService : IProjectService
 
     public async Task<bool> UpdateAsync(Guid id, UpdateProjectRequest request, CancellationToken ct)
     {
-        var entity = await _db.Projects.FirstOrDefaultAsync(p => p.Id == id, ct);
+        var entity = await db.Projects.FirstOrDefaultAsync(p => p.Id == id, ct);
         if (entity is null) return false;
 
         entity.Name = request.Name.Trim();
         entity.Description = request.Description?.Trim();
 
-        await _db.SaveChangesAsync(ct);
+        await db.SaveChangesAsync(ct);
         return true;
     }
 
     public async Task<bool> DeleteAsync(Guid id, CancellationToken ct)
     {
-        var entity = await _db.Projects.FirstOrDefaultAsync(p => p.Id == id, ct);
+        var entity = await db.Projects.FirstOrDefaultAsync(p => p.Id == id, ct);
         if (entity is null) return false;
 
-        _db.Projects.Remove(entity);
-        await _db.SaveChangesAsync(ct);
+        db.Projects.Remove(entity);
+        await db.SaveChangesAsync(ct);
         return true;
     }
 }

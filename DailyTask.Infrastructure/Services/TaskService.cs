@@ -6,16 +6,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DailyTask.App.Services;
 
-public sealed class TaskService : ITaskService
+/*public sealed class TaskService : ITaskService
 {
     private readonly DailyTaskDbContext _db;
 
-    public TaskService(DailyTaskDbContext db) => _db = db;
+    public TaskService(DailyTaskDbContext db) => _db = db;*/
+public sealed class TaskService(DailyTaskDbContext db) : ITaskService
+{
 
-    public async Task<TaskResponse> CreateAsync(Guid projectId, CreateTaskRequest request, CancellationToken ct)
-    {
-        // Validar que el proyecto existe (FK friendly + error claro)
-        var projectExists = await _db.Projects.AsNoTracking().AnyAsync(p => p.Id == projectId, ct);
+    public async Task<TaskResponse> CreateAsync(Guid projectId, CreateTaskRequest request, CancellationToken ct) {
+        var projectExists = await db.Projects.AsNoTracking().AnyAsync(p => p.Id == projectId, ct);
         if (!projectExists)
             throw new InvalidOperationException($"Project '{projectId}' does not exist.");
 
@@ -27,8 +27,8 @@ public sealed class TaskService : ITaskService
             DueAtUtc = request.DueAtUtc
         };
 
-        _db.Tasks.Add(entity);
-        await _db.SaveChangesAsync(ct);
+        db.Tasks.Add(entity);
+        await db.SaveChangesAsync(ct);
 
         return new TaskResponse(
             entity.Id, entity.ProjectId, entity.Title, entity.Notes,
@@ -38,7 +38,7 @@ public sealed class TaskService : ITaskService
 
     public async Task<IReadOnlyList<TaskResponse>> GetByProjectAsync(Guid projectId, CancellationToken ct)
     {
-        return await _db.Tasks
+        return await db.Tasks
             .AsNoTracking()
             .Where(t => t.ProjectId == projectId)
             .OrderBy(t => t.IsDone)
@@ -51,13 +51,13 @@ public sealed class TaskService : ITaskService
 
     public async Task<bool> MarkDoneAsync(Guid taskId, CancellationToken ct)
     {
-        var entity = await _db.Tasks.FirstOrDefaultAsync(t => t.Id == taskId, ct);
+        var entity = await db.Tasks.FirstOrDefaultAsync(t => t.Id == taskId, ct);
         if (entity is null) return false;
 
         if (!entity.IsDone)
         {
             entity.IsDone = true;
-            await _db.SaveChangesAsync(ct);
+            await db.SaveChangesAsync(ct);
         }
 
         return true;
@@ -65,11 +65,11 @@ public sealed class TaskService : ITaskService
 
     public async Task<bool> DeleteAsync(Guid taskId, CancellationToken ct)
     {
-        var entity = await _db.Tasks.FirstOrDefaultAsync(t => t.Id == taskId, ct);
+        var entity = await db.Tasks.FirstOrDefaultAsync(t => t.Id == taskId, ct);
         if (entity is null) return false;
 
-        _db.Tasks.Remove(entity);
-        await _db.SaveChangesAsync(ct);
+        db.Tasks.Remove(entity);
+        await db.SaveChangesAsync(ct);
         return true;
     }
 }

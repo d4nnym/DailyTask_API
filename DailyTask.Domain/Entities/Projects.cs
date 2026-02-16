@@ -11,5 +11,6 @@ public class Project{
 
     public DateTime CreatedAtUtc { get; set; } = DateTime.UtcNow;
 
-    public ICollection<TaskItem> Tasks { get; set; } = new List<TaskItem>();
+    //public ICollection<TaskItem> Tasks { get; set; } = new List<TaskItem>();
+    public ICollection<TaskItem> Tasks { get; set; } = [];
 }
