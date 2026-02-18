@@ -24,7 +24,7 @@ public class DailyTaskDbContext(DbContextOptions<DailyTaskDbContext> options) : 
             e.HasKey(x => x.Id);
 
             e.Property(x => x.Id).HasColumnName("ID");
-            e.Property(x => x.Name).HasColumnName("NAME").HasMaxLength(200).IsRequired();
+            e.Property(x => x.Name).HasColumnName("NAME").HasMaxLength(255).IsRequired();
             e.Property(x => x.Description).HasColumnName("DESCRIPTION").HasMaxLength(2000);
             e.Property(x => x.CreatedAtUtc).HasColumnName("CREATED_AT_UTC");
 
@@ -41,7 +41,7 @@ public class DailyTaskDbContext(DbContextOptions<DailyTaskDbContext> options) : 
             e.Property(x => x.Id).HasColumnName("ID");
             e.Property(x => x.ProjectId).HasColumnName("PROJECT_ID");
 
-            e.Property(x => x.Title).HasColumnName("TITLE").HasMaxLength(300).IsRequired();
+            e.Property(x => x.Title).HasColumnName("TITLE").HasMaxLength(255).IsRequired();
             e.Property(x => x.Notes).HasColumnName("NOTES").HasMaxLength(4000);
 
             e.Property(x => x.IsDone).HasColumnName("IS_DONE");
